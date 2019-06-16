@@ -7,16 +7,36 @@ import java.time.*
  */
 typealias TickForward = (Instant) -> Instant
 
+/**
+ * Type that allows for dealing with signature internally.
+ */
+private typealias OptionallyTickForward = (Instant) -> Instant?
+
 private val ONE_SECOND = Duration.ofSeconds(1)
 private val DEFAULT_ZONE = ZoneOffset.UTC
+private val noopTick: TickForward = { instant -> instant }
 
 /**
  * A concrete [Clock] implementation that is configurable and alterable for the purposes of reproducible
  * tests.
  *
  * @constructor Create an instance
+ * @param initialInstant The time the instance is initially set to.
+ * @param zone The time-zone the instance should be based in. Defaults to UTC.
+ * @param isSequence `true` if [tickForward] ignores the given [Instant] when generating the next time. This will cause
+ * [tick] and [moveTo] to throw [IllegalStateException] as they won't have an effect on this instance.
+ * @param tickForward A function that specifies how the clock's time should change when the time is requested.
+ * Defaults to returning the given [Instant]. The function can return `null` to indicate that there are no more times
+ * to provide.
  */
-class TimeSlip : Clock() {
+class TimeSlip private constructor(
+    initialInstant: Instant?,
+    private val zone: ZoneId,
+    private val isSequence: Boolean = false,
+    private val tickForward: OptionallyTickForward = noopTick
+) : Clock() {
+    private var nextInstant: Instant? = initialInstant
+
     /**
      * Returns a copy of this clock with a different time-zone.
      *
@@ -24,9 +44,10 @@ class TimeSlip : Clock() {
      * @return a clock based on this clock with the specified time-zone
      * @throws IllegalStateException This clock doesn't have any more times to provide.
      */
-    override fun withZone(newZone: ZoneId): Clock {
-        TODO("not implemented")
-    }
+    override fun withZone(newZone: ZoneId): Clock = TimeSlip(
+        nextInstant ?: throw IllegalStateException("No more times to provide."),
+        newZone, isSequence, tickForward
+    )
 
     /**
      * Gets the time-zone being used to create dates and times.
@@ -34,9 +55,7 @@ class TimeSlip : Clock() {
      * @return the time-zone being used to interpret instants
      * @throws IllegalStateException This clock doesn't have any more times to provide.
      */
-    override fun getZone(): ZoneId {
-        TODO("not implemented")
-    }
+    override fun getZone() = if (nextInstant == null) throw IllegalStateException("No more times to provide.") else zone
 
     /**
      * Gets the current instant of the clock.
@@ -45,7 +64,9 @@ class TimeSlip : Clock() {
      * @throws IllegalStateException This clock doesn't have any more times to provide.
      */
     override fun instant(): Instant {
-        TODO("not implemented")
+        val result = nextInstant ?: throw IllegalStateException("No more times to provide.")
+        nextInstant = tickForward(result)
+        return result
     }
 
     /**
@@ -57,7 +78,16 @@ class TimeSlip : Clock() {
      */
     @JvmOverloads
     fun tick(delta: Duration = ONE_SECOND) {
-        TODO("not implemented")
+        if (isSequence) {
+            throw notSupported("sequences")
+        }
+        nextInstant = nextInstant.let {
+            if (it == null) {
+                throw notSupported("TimeSlip.noCall() or after done() was called")
+            } else {
+                it.plus(delta)
+            }
+        }
     }
 
     /**
@@ -67,7 +97,13 @@ class TimeSlip : Clock() {
      * @throws IllegalStateException [sequence] was used to create this instance.
      */
     fun moveTo(newInstant: Instant) {
-        TODO("not implemented")
+        if (isSequence) {
+            throw IllegalStateException("Calling moveTo() is not supported with sequences.")
+        }
+        if (nextInstant == null) {
+            throw IllegalStateException("Calling moveTo() is not supported when initialized with noCall().")
+        }
+        nextInstant = newInstant
     }
 
     /**
@@ -76,8 +112,11 @@ class TimeSlip : Clock() {
      * Any method calls will throw [IllegalStateException] after this is called.
      */
     fun done() {
-        TODO("not implemented")
+        nextInstant = null
     }
+
+    private fun notSupported(condition: String) =
+        IllegalStateException("Calling tick() is not supported with $condition.")
 
     companion object {
         /**
@@ -88,9 +127,7 @@ class TimeSlip : Clock() {
          * @return A newly constructed instance.
          */
         @JvmStatic
-        fun noCall(): TimeSlip {
-            TODO("not implemented")
-        }
+        fun noCall() = TimeSlip(null, DEFAULT_ZONE)
 
         /**
          * Create an instance that starts at a given time and won't move unless [moveTo] or [tick] are called.
@@ -101,9 +138,7 @@ class TimeSlip : Clock() {
          */
         @JvmStatic
         @JvmOverloads
-        fun at(initialInstant: Instant, zone: ZoneId = DEFAULT_ZONE): TimeSlip {
-            TODO("not implemented")
-        }
+        fun at(initialInstant: Instant, zone: ZoneId = DEFAULT_ZONE) = TimeSlip(initialInstant, zone)
 
         /**
          * Create an instance that starts at a given time, but moves forward by a constant amount each time the current
@@ -118,7 +153,7 @@ class TimeSlip : Clock() {
         @JvmStatic
         @JvmOverloads
         fun startAt(initialInstant: Instant, zone: ZoneId = DEFAULT_ZONE, tickAmount: Duration = ONE_SECOND): TimeSlip {
-            TODO("not implemented")
+            return TimeSlip(initialInstant, zone, tickForward = { instant -> instant.plus(tickAmount) })
         }
 
         /**
@@ -128,12 +163,15 @@ class TimeSlip : Clock() {
          * @param initialInstant The time the instance is initially set to.
          * @param zone The time-zone the instance should be based in. Defaults to UTC.
          * @param tickForward A function that specifies how the clock's time should change when the time is requested.
+         * This is called immediately *after* a value is requested. So when the first time is requested, this function
+         * will be called to to pre-load the next time to return. This should be considered if this function has any
+         * side effects.
          * @return A newly constructed instance.
          */
         @JvmStatic
         @JvmOverloads
         fun startAt(initialInstant: Instant, zone: ZoneId = DEFAULT_ZONE, tickForward: TickForward): TimeSlip {
-            TODO("not implemented")
+            return TimeSlip(initialInstant, zone, isSequence = false, tickForward = tickForward)
         }
 
         /**
@@ -144,7 +182,7 @@ class TimeSlip : Clock() {
          * @throws IllegalStateException No [Instant]s were added to the builder. Use [noCall] to create a [TimeSlip]
          * that does not produce any times.
          */
-        fun sequence(body: SequenceBuilder.() -> Unit): TimeSlip = TODO("not implemented")
+        fun sequence(body: SequenceBuilder.() -> Unit) = sequenceBuilder().apply(body).build()
 
         /**
          * Create a builder for a [TimeSlip] instance backed by a sequence of [Instant]s.
@@ -164,7 +202,7 @@ class TimeSlip : Clock() {
          * @param zoneId The zone id to use.
          * @return This builder.
          */
-        fun zone(zoneId: ZoneId): SequenceBuilder = TODO("not implemented")
+        fun zone(zoneId: ZoneId) = apply { zone = zoneId }
 
         /**
          * When `true`, after returning the last [Instant] in the sequence, the next sequence will repeat again from
@@ -182,7 +220,9 @@ class TimeSlip : Clock() {
          * sequence, [IllegalStateException] will be thrown the next time the time is requested.
          * @return This builder.
          */
-        fun cycle(shouldCycle: Boolean): SequenceBuilder = TODO("not implemented")
+        fun cycle(shouldCycle: Boolean) = apply { cycle = shouldCycle }
+
+        private val _instants = arrayListOf<Instant>()
 
         /**
          * Prepend a number of instants to the start of the sequence of instants.
@@ -190,7 +230,7 @@ class TimeSlip : Clock() {
          * @param instants Instants to add to the sequence.
          * @return This builder.
          */
-        fun first(vararg instants: Instant): SequenceBuilder = TODO("not implemented")
+        fun first(vararg instants: Instant) = apply { first(instants.toList()) }
 
         /**
          * Prepend a number of instants to the start of the sequence of instants.
@@ -198,7 +238,7 @@ class TimeSlip : Clock() {
          * @param instants Instants to add to the sequence.
          * @return This builder.
          */
-        fun first(instants: List<Instant>): SequenceBuilder = TODO("not implemented")
+        fun first(instants: Collection<Instant>) = apply { _instants.addAll(0, instants) }
 
         /**
          * Apend a number of instants to the end of the sequence of instants.
@@ -206,7 +246,7 @@ class TimeSlip : Clock() {
          * @param instants Instants to add to the sequence.
          * @return This builder.
          */
-        fun then(vararg instants: Instant): SequenceBuilder = TODO("not implemented")
+        fun then(vararg instants: Instant) = apply { then(instants.toList()) }
 
         /**
          * Apend a number of instants to the end of the sequence of instants.
@@ -214,7 +254,7 @@ class TimeSlip : Clock() {
          * @param instants Instants to add to the sequence.
          * @return This builder.
          */
-        fun then(instants: List<Instant>): SequenceBuilder = TODO("not implemented")
+        fun then(instants: Collection<Instant>) = apply { _instants.addAll(instants) }
 
         /**
          * Construct a [TimeSlip] instance that will provide [Instant]s based on the configured sequence.
@@ -224,7 +264,21 @@ class TimeSlip : Clock() {
          * that does not produce any times.
          */
         fun build(): TimeSlip {
-            TODO("not implemented")
+            val values = _instants.toList()
+            if (values.isEmpty()) {
+                return TimeSlip(null, zone, isSequence = true)
+            }
+            var nextIndex = 1
+            @Suppress("UNUSED_PARAMETER")
+            fun tickForward(current: Instant): Instant? {
+                if (!cycle && nextIndex >= values.size) {
+                    return null
+                }
+                val result = values[nextIndex % values.size]
+                nextIndex++
+                return result
+            }
+            return TimeSlip(values[0], zone, true, ::tickForward)
         }
     }
 }
