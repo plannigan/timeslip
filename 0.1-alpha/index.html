@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>Home &mdash; TimeSlip</title>
+
+    <link rel="shortcut icon" href="./img/favicon.ico">
+    <link rel="stylesheet" href="./css/alabaster.css" type="text/css">
+    <link rel="stylesheet" href="./css/alabaster-overrides.css" type="text/css">
+
+    
+
+    
+      <script src="search/main.js"></script>
+    
+
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+    
+  
+</head>
+<body>
+
+  <div class="document">
+    <div class="documentwrapper">
+      <div class="bodywrapper">
+        <div class="body" role="main">
+          
+            <h1 id="timeslip-time-manipulation-for-jvm-test-cases">TimeSlip: Time manipulation for JVM test cases<a class="headerlink" href="#timeslip-time-manipulation-for-jvm-test-cases" title="Permanent link">¶</a></h1>
+<p>TimeSlip allows test cases to manipulate time by providing a concrete <code>java.time.Clock</code> implementation that will operate
+in a deterministic way, independent of the actual passage of time.</p>
+<p>The TimeSlip API is specifically designed to be easy to use from Kotlin and Java code.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">¶</a></h2>
+<p>TimeSlip has multiple functions to create a <code>Clock</code> instance based on how it needs to operate.</p>
+<h3 id="manual-operations">Manual Operations<a class="headerlink" href="#manual-operations" title="Permanent link">¶</a></h3>
+<p>The most basic usage is setting the clock to a specific instant.</p>
+<div class="codehilite"><pre><span></span><span class="k">val</span> <span class="py">clock</span> <span class="p">=</span> <span class="n">TimeSlip</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="p">))</span> <span class="c1">// Defaults to UTC</span>
+<span class="k">val</span> <span class="py">clock</span> <span class="p">=</span> <span class="n">TimeSlip</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="p">),</span> <span class="n">ZoneOffset</span><span class="p">.</span><span class="n">ofHours</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
+</pre></div>
+
+<p>This clock will stay at this fixed point in time unless it is altered by the test case. The clock can be moved to a new
+instant.</p>
+<div class="codehilite"><pre><span></span><span class="n">clock</span><span class="p">.</span><span class="n">moveTo</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="p">))</span>
+</pre></div>
+
+<p>Or moved forward a specific amount of time.</p>
+<div class="codehilite"><pre><span></span><span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">()</span> <span class="c1">// 1 second</span>
+<span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="n">Duration</span><span class="p">.</span><span class="n">ofHours</span><span class="p">(</span><span class="m">5</span><span class="p">))</span>
+</pre></div>
+
+<p>In some situations, it might be useful to prevent the clock from providing any more values. Calling <code>clock.done()</code> will
+cause the clock to throw <code>IllegalStateException</code> whenever any method is called.</p>
+<p>If a test case needs to assert that the clock instance is never used. <code>TimeSlip.noCall()</code> is equivalent to creating an
+instance and immediately calling <code>done()</code>.</p>
+<h3 id="automatic-operations">Automatic Operations<a class="headerlink" href="#automatic-operations" title="Permanent link">¶</a></h3>
+<p>If the clock needs to progress forward, manually ticking the clock forward isn't possible when the time will be checked
+multiple times during the execution of a single statement of the test case. TimeSlip provides a number of ways to
+configure how the current instant should change after each time the current instant is checked.</p>
+<p>The most basic way to do that is to create a clock that starts at a specific instant and ticks forward one second each
+time the current instant is checked.</p>
+<div class="codehilite"><pre><span></span><span class="k">val</span> <span class="py">clock</span> <span class="p">=</span> <span class="n">TimeSlip</span><span class="p">.</span><span class="n">startAt</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="p">))</span> <span class="c1">// Defaults to 1 second and UTC</span>
+</pre></div>
+
+<p>Just like <code>tick()</code>, a custom tick amount can be provided.</p>
+<div class="codehilite"><pre><span></span><span class="k">val</span> <span class="py">clock</span> <span class="p">=</span> <span class="n">TimeSlip</span><span class="p">.</span><span class="n">startAt</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="p">),</span> <span class="n">Duration</span><span class="p">.</span><span class="n">ofMinutes</span><span class="p">(</span><span class="m">3</span><span class="p">))</span>
+</pre></div>
+
+<p>When the clock should tick forward automatically, but not by a fixed amount a sequence on instants can be provides.</p>
+<div class="codehilite"><pre><span></span><span class="k">val</span> <span class="py">clock</span> <span class="p">=</span> <span class="n">TimeSlip</span><span class="p">.</span><span class="n">sequence</span> <span class="p">{</span>
+    <span class="n">first</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="p">))</span>
+    <span class="n">then</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:16:00.00Z&quot;</span><span class="p">),</span> <span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:17:00.00Z&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>When creating a sequence in Java, the code will have to work directly with the builder.</p>
+<div class="codehilite"><pre><span></span><span class="n">Clock</span> <span class="n">clock</span> <span class="o">=</span> <span class="n">TimeSlip</span><span class="o">.</span><span class="na">sequenceBuilder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">first</span><span class="o">(</span><span class="n">Instant</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">then</span><span class="o">(</span><span class="n">Instant</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">&quot;2007-12-03T10:16:00.00Z&quot;</span><span class="o">),</span> <span class="n">Instant</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">&quot;2007-12-03T10:17:00.00Z&quot;</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</pre></div>
+
+<p>By default, after that last instant in the sequence it provided, it will not provide any more values as if <code>done()</code> was
+called. Alternatively, the clock can return to the start of the sequence when <code>cycle</code> is set to <code>true</code>.</p>
+<h3 id="advanced-operations">Advanced Operations<a class="headerlink" href="#advanced-operations" title="Permanent link">¶</a></h3>
+<p>If the clock needs to change values automatically, but the changes don't align with the functions already discussed, a
+custom callback can be passed in to calculate the next instant to provide.</p>
+<div class="codehilite"><pre><span></span><span class="k">var</span> <span class="py">large</span> <span class="p">=</span> <span class="k">true</span>
+<span class="k">val</span> <span class="py">clock</span> <span class="p">=</span> <span class="n">TimeSlip</span><span class="p">.</span><span class="n">startAt</span><span class="p">(</span><span class="n">Instant</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;2007-12-03T10:15:30.00Z&quot;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">initial</span> <span class="p">-&gt;</span> <span class="n">initial</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="n">large</span><span class="p">)</span> <span class="n">Duration</span><span class="p">.</span><span class="n">ofDays</span><span class="p">(</span><span class="m">10</span><span class="p">)</span> <span class="k">else</span> <span class="n">Duration</span><span class="p">.</span><span class="n">ofSeconds</span><span class="p">(</span><span class="m">10</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="footer">
+Created my free logo at <a href="https://logomakr.com/">LogoMakr.com</a>
+</div>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebarwrapper">
+        
+          
+            
+  <p class="logo">
+    <a href=".">
+      <img class="logo" src="./logo.png" title="TimeSlip logo">
+    </a>
+  </p>
+  
+
+
+
+  <p class="blurb">Time manipulation for JVM test cases</p>
+
+          
+        
+      </div>
+    </div>
+    <div class="clearer"></div>
+  </div>
+
+  
+    <div class="footer">
+      
+      
+    </div>
+  
+
+  <!--
+  MkDocs version      : 1.0.4
+  Docs Build Date UTC : 2019-06-27 01:15:21
+  -->
+</body>
+</html>
