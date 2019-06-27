@@ -1,0 +1,3 @@
+<div class="footer">
+Created my free logo at <a href="https://logomakr.com/">LogoMakr.com</a>
+</div>

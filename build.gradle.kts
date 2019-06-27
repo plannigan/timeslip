@@ -7,6 +7,7 @@ plugins {
     id("com.jfrog.bintray") version "1.8.4"
     id("org.jlleitschuh.gradle.ktlint") version "8.1.0"
     id("org.jlleitschuh.gradle.ktlint-idea") version "8.1.0"
+    id("ru.vyarus.mkdocs") version "1.1.0"
 }
 
 group = "com.hypercubetools"
@@ -65,4 +66,10 @@ publishing {
             }
         }
     }
+}
+
+mkdocs {
+    strict = true
+
+    python.pip("mkdocs-alabaster:0.8.0", "markdown-include:0.5.1")
 }

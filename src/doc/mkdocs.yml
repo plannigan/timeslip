@@ -1,0 +1,43 @@
+site_name: TimeSlip
+
+# Meta tags (placed in header)
+site_description: Time manipulation for JVM test cases
+site_url: https://timeslip.hypercubetools.com
+
+# Repository (add link to repository on each page)
+repo_name: timeslip
+repo_url: http://github.com/you/timeslip
+edit_uri: edit/master/src/doc/docs/
+
+theme: 'alabaster'
+extra:
+  homepage_nav: false
+  homepage_sidebars:
+  - about
+  logo: logo.png
+  logo_title: "TimeSlip logo"
+  show_powered_by: false
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - footnotes
+  - meta
+  - markdown_include.include:
+      base_path: docs
+  - toc:
+      permalink: "¶"
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.superfences
+
+nav:
+  - Home: index.md
+#  - User guide:
+#      - Installation: guide/installation.md
+#  - About:
+#      - Release notes: about/history.md
