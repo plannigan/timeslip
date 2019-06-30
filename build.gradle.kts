@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "com.hypercubetools"
-version = "0.1-alpha"
+version = "0.1-alpha-3"
 
 repositories {
     mavenCentral()
@@ -41,6 +41,12 @@ val dokka by tasks.getting(DokkaTask::class) {
     }
 }
 
+val packageJavadoc by tasks.registering(Jar::class) {
+    dependsOn("dokka")
+    archiveClassifier.set("javadoc")
+    from(sourceSets.main.get().allSource)
+}
+
 bintray {
     user = System.getenv("BINTRAY_USER") ?: project.properties["bintray.user"]?.toString()
     key = System.getenv("BINTRAY_KEY")
@@ -62,18 +68,31 @@ publishing {
     publications {
         register<MavenPublication>("lib") {
             from(components["java"])
+
+            artifact(tasks.kotlinSourcesJar.get())
+            artifact(packageJavadoc.get())
+
             groupId = project.group.toString()
             artifactId = project.name
             version = project.version.toString()
 
-            pom.withXml {
-                asNode().apply {
-                    appendNode("name", project.name)
-                    appendNode("licenses").appendNode("license").apply {
-                        appendNode("name", "MIT")
-                        appendNode("url", "https://opensource.org/licenses/MIT")
-                        appendNode("distribution", "repo")
+            pom {
+                name.set(project.name)
+                description.set("Time manipulation for JVM test cases")
+                url.set("https://timeslip.hypercubetools.com")
+
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://opensource.org/licenses/MIT")
+                        distribution.set("repo")
                     }
+                }
+
+                scm {
+                    connection.set("scm:git:git://github.com/plannigan/timeslip")
+                    developerConnection.set("scm:git:git://github.com/plannigan/timeslip")
+                    url.set("https://timeslip.hypercubetools.com")
                 }
             }
         }
