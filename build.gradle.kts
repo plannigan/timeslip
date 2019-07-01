@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "com.hypercubetools"
-version = "0.1-alpha-3"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
