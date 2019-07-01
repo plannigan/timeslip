@@ -191,6 +191,9 @@ class TimeSlip private constructor(
         fun sequenceBuilder() = SequenceBuilder()
     }
 
+    /**
+     * Builder for a [TimeSlip] instance backed by a sequence of [Instant]s.
+     */
     class SequenceBuilder {
         /**
          * Zone Id to be used by [Clock]. Defaults to UTC.
