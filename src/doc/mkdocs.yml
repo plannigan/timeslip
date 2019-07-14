@@ -6,17 +6,31 @@ site_url: https://timeslip.hypercubetools.com
 
 # Repository (add link to repository on each page)
 repo_name: timeslip
-repo_url: http://github.com/you/timeslip
+repo_url: https://github.com/plannigan/timeslip
 edit_uri: edit/master/src/doc/docs/
 
-theme: 'alabaster'
+theme:
+  name: 'material'
+  palette:
+    primary: 'grey'
+    accent: 'indigo'
+  logo:
+    icon: "timelapse"
 extra:
-  homepage_nav: false
   homepage_sidebars:
-  - about
-  logo: logo.png
+    - about
+    - toc
+    - search
+  sidebars:
+    - about
+    - navigation
+    - toc
+    - search
   logo_title: "TimeSlip logo"
   show_powered_by: false
+
+extra_css:
+  - css/code-tabs.css
 
 # Extensions
 markdown_extensions:
@@ -34,10 +48,11 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.superfences
+  - markdown_fenced_code_tabs:
+      template: 'default'
 
 nav:
   - Home: index.md
-#  - User guide:
-#      - Installation: guide/installation.md
-#  - About:
-#      - Release notes: about/history.md
+  - Getting started: getting-started.md
+  - Usage guide: usage-guide.md
+  - Release Notes: history.md
