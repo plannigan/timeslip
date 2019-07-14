@@ -5,6 +5,11 @@ in a deterministic way, independent of the actual passage of time.
 
 The TimeSlip API is specifically designed to be easy to use from Kotlin and Java code.
 
+[![Kotlin](https://img.shields.io/badge/kotlin-1.3.31-blue.svg)](http://kotlinlang.org)
+[![Bintray](https://img.shields.io/bintray/v/plannigan/com.hypercubetools/timeslip.svg?color=blue&label=jcenter)](https://bintray.com/plannigan/com.hypercubetools/timeslip/_latestVersion)
+
+
+
 ## Usage
 
 TimeSlip has multiple functions to create a `Clock` instance based on how it needs to operate.
