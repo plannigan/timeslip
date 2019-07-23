@@ -47,11 +47,18 @@ println(formatTime(sequenceClock))
 
 ## Where to Start?
 
-Read the [Getting Started][getting_started] page.
+To learn the basics of how to start using TimeSlip, read the [Getting Started][getting_started] page.
 
-## Detail Documentation
+## Detailed Documentation
 
-Read the [Usage Guide][usage_guide] page.
+To learn more about the various ways TimeSlip can be configured, read the [Usage Guide][usage_guide] page.
+
+## API Reference
+
+To find specific information about a specific function, read the [API Reference][api_reference]. Most of the API
+exists on the [TimeSlip][timeslip_api] page.
 
 [getting_started]: getting-started.md
 [usage_guide]: usage-guide.md
+[timeslip_api]: api/com.hypercubetools.timeslip/-time-slip/index.md
+[api_reference]: api/index.md

@@ -12,7 +12,7 @@ edit_uri: edit/master/src/doc/docs/
 theme:
   name: 'material'
   palette:
-    primary: 'grey'
+    primary: 'indigo'
     accent: 'indigo'
   logo:
     icon: "timelapse"
@@ -55,4 +55,5 @@ nav:
   - Home: index.md
   - Getting started: getting-started.md
   - Usage guide: usage-guide.md
+  - API: api/index.md
   - Release Notes: history.md
