@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.dokka.gradle.DokkaTask
+import ru.vyarus.gradle.plugin.mkdocs.task.MkdocsTask
 import java.net.URL
 
 plugins {
@@ -32,13 +33,22 @@ tasks.withType<KotlinCompile> {
 testWithJunit()
 coverageWithJacoco()
 
-val dokka by tasks.getting(DokkaTask::class) {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
-
+fun DokkaTask.dokkaConfig(format: String, outputDir: String) {
+    outputFormat = format
+    outputDirectory = outputDir
     externalDocumentationLink {
         url = URL("https://docs.oracle.com/javase/8/docs/api/")
     }
+}
+
+// Generate the API documentation as html for javadoc distribution
+val dokka by tasks.getting(DokkaTask::class) {
+    dokkaConfig("html", "$buildDir/javadoc")
+}
+
+// Generate the API documentation as markdown for docs site
+val dokkaMd by tasks.register<DokkaTask>("dokkaMd") {
+    dokkaConfig("gfm", "src/doc/docs/api")
 }
 
 val packageJavadoc by tasks.registering(Jar::class) {
@@ -102,5 +112,12 @@ publishing {
 mkdocs {
     strict = true
 
-    python.pip("mkdocs-alabaster:0.8.0", "markdown-include:0.5.1")
+    python.pip("mkdocs-material:4.4.0", "markdown-include:0.5.1", "markdown-fenced-code-tabs:1.0.5")
 }
+
+fun MkdocsTask.dokkaDepends() {
+    dependsOn("dokkaMd")
+}
+
+val mkdocsServe by tasks.getting(MkdocsTask::class)  { dokkaDepends() }
+val mkdocsBuild by tasks.getting(MkdocsTask::class) { dokkaDepends() }
