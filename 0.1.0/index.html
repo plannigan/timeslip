@@ -413,7 +413,9 @@
 in a deterministic way, independent of the actual passage of time.</p>
 <p>The TimeSlip API is specifically designed to be easy to use from Kotlin and Java code.</p>
 <p><a href="http://kotlinlang.org"><img alt="Kotlin" src="https://img.shields.io/badge/kotlin-1.3.31-blue.svg" /></a>
-<a href="https://bintray.com/plannigan/com.hypercubetools/timeslip/_latestVersion"><img alt="Bintray" src="https://img.shields.io/bintray/v/plannigan/com.hypercubetools/timeslip.svg?color=blue&amp;label=jcenter" /></a></p>
+<a href="https://bintray.com/plannigan/com.hypercubetools/timeslip/_latestVersion"><img alt="Bintray" src="https://img.shields.io/bintray/v/plannigan/com.hypercubetools/timeslip.svg?color=blue&amp;label=jcenter" /></a>
+<a href="https://circleci.com/gh/plannigan/timeslip"><img alt="CircleCI" src="https://circleci.com/gh/plannigan/timeslip.svg?style=svg" /></a>
+<a href="https://codecov.io/gh/plannigan/timeslip"><img alt="codecov" src="https://codecov.io/gh/plannigan/timeslip/branch/master/graph/badge.svg" /></a></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">¶</a></h2>
 <p> <div class=codehilite><pre><span></span><span class=k>fun</span> <span class=nf>formatTime</span><span class=p>(</span><span class=n>clock</span><span class=p>:</span> <span class=n>Clock</span><span class=p>)</span> <span class=p>=</span>
     <span class=n>DateTimeFormatter</span><span class=p>.</span><span class=n>ISO_TIME</span><span class=p>.</span><span class=n>withZone</span><span class=p>(</span><span class=n>clock</span><span class=p>.</span><span class=n>zone</span><span class=p>).</span><span class=n>format</span><span class=p>(</span><span class=n>clock</span><span class=p>.</span><span class=n>instant</span><span class=p>())</span>
