@@ -46,5 +46,4 @@ jobs:
           path: build/test-results/test
           when: always
       - codecov/upload:
-          file: uild/reports/jacoco/test/jacocoTestReport.xml
-
+          file: build/reports/jacoco/test/jacocoTestReport.xml
