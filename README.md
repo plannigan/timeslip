@@ -7,6 +7,7 @@ The TimeSlip API is specifically designed to be easy to use from Kotlin and Java
 
 [![Kotlin](https://img.shields.io/badge/kotlin-1.3.31-blue.svg)](http://kotlinlang.org)
 [![Bintray](https://img.shields.io/bintray/v/plannigan/com.hypercubetools/timeslip.svg?color=blue&label=jcenter)](https://bintray.com/plannigan/com.hypercubetools/timeslip/_latestVersion)
+[![CircleCI](https://circleci.com/gh/plannigan/timeslip.svg?style=svg)](https://circleci.com/gh/plannigan/timeslip)
 
 ## Installation
 
