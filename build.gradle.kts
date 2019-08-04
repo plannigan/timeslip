@@ -119,5 +119,5 @@ fun MkdocsTask.dokkaDepends() {
     dependsOn("dokkaMd")
 }
 
-val mkdocsServe by tasks.getting(MkdocsTask::class)  { dokkaDepends() }
+val mkdocsServe by tasks.getting(MkdocsTask::class) { dokkaDepends() }
 val mkdocsBuild by tasks.getting(MkdocsTask::class) { dokkaDepends() }
