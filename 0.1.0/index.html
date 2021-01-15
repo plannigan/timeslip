@@ -438,6 +438,18 @@ in a deterministic way, independent of the actual passage of time.</p>
 <span class=c1>// 10:15:31Z</span>
 <span class=c1>// 10:15:32Z</span>
 
+<span class=k>val</span> <span class=py>ticking2MinClock</span> <span class=p>=</span> <span class=n>TimeSlip</span><span class=p>.</span><span class=n>startAt</span><span class=p>(</span>
+    <span class=n>Instant</span><span class=p>.</span><span class=n>parse</span><span class=p>(</span><span class=s>&quot;2007-12-03T10:15:30.00Z&quot;</span><span class=p>),</span>
+    <span class=n>tickAmount</span> <span class=p>=</span> <span class=n>Duration</span><span class=p>.</span><span class=n>ofMinutes</span><span class=p>(</span><span class=m>2</span><span class=p>)</span>
+<span class=p>)</span>
+<span class=n>println</span><span class=p>(</span><span class=n>formatTime</span><span class=p>(</span><span class=n>ticking2MinClock</span><span class=p>))</span>
+<span class=n>println</span><span class=p>(</span><span class=n>formatTime</span><span class=p>(</span><span class=n>ticking2MinClock</span><span class=p>))</span>
+<span class=n>println</span><span class=p>(</span><span class=n>formatTime</span><span class=p>(</span><span class=n>ticking2MinClock</span><span class=p>))</span>
+
+<span class=c1>// 10:15:30Z</span>
+<span class=c1>// 10:17:30Z</span>
+<span class=c1>// 10:19:30Z</span>
+
 <span class=k>val</span> <span class=py>sequenceClock</span> <span class=p>=</span> <span class=n>TimeSlip</span><span class=p>.</span><span class=n>sequence</span> <span class=p>{</span>
     <span class=n>first</span><span class=p>(</span><span class=n>Instant</span><span class=p>.</span><span class=n>parse</span><span class=p>(</span><span class=s>&quot;2007-12-03T10:15:30.00Z&quot;</span><span class=p>))</span>
     <span class=n>then</span><span class=p>(</span><span class=n>Instant</span><span class=p>.</span><span class=n>parse</span><span class=p>(</span><span class=s>&quot;2007-12-03T10:16:00.00Z&quot;</span><span class=p>),</span> <span class=n>Instant</span><span class=p>.</span><span class=n>parse</span><span class=p>(</span><span class=s>&quot;2007-12-03T10:17:00.00Z&quot;</span><span class=p>))</span>
