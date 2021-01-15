@@ -59,6 +59,18 @@ println(formatTime(tickingClock))
 // 10:15:31Z
 // 10:15:32Z
 
+val ticking2MinClock = TimeSlip.startAt(
+    Instant.parse("2007-12-03T10:15:30.00Z"),
+    tickAmount = Duration.ofMinutes(2)
+)
+println(formatTime(ticking2MinClock))
+println(formatTime(ticking2MinClock))
+println(formatTime(ticking2MinClock))
+
+// 10:15:30Z
+// 10:17:30Z
+// 10:19:30Z
+
 val sequenceClock = TimeSlip.sequence {
     first(Instant.parse("2007-12-03T10:15:30.00Z"))
     then(Instant.parse("2007-12-03T10:16:00.00Z"), Instant.parse("2007-12-03T10:17:00.00Z"))
