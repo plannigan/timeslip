@@ -2,9 +2,9 @@
 
 ## Installation
 
-Releases are published to bintray [jcenter][jcenter].
+Releases are published to [maven central][maven].
 
-[![Bintray](https://img.shields.io/bintray/v/plannigan/com.hypercubetools/timeslip.svg?color=blue&label=jcenter)][jcenter_latest]
+[![MavenCentral](https://img.shields.io/maven-central/v/com.hypercubetools/timeslip)][maven_latest]
  
 It can be included in your project by including the following in your project's build configuration.
 
@@ -25,7 +25,7 @@ dependencies {
 
 ## Usage Examples
 
-Let's look at a class that uses a `Clock` in it's implementation.
+Let's look at a class which uses a `Clock` as part of the implementation.
 
 ```kotlin
 import java.time.Clock
@@ -158,6 +158,6 @@ This code will always produce the following output.
 
 Read the [Usage Guide][usage_guide] to see more detailed descriptions of the ways `TimeSlip` can be configured.
 
-[jcenter]: https://bintray.com/plannigan/com.hypercubetools/timeslip
-[jcenter_latest]: https://bintray.com/plannigan/com.hypercubetools/timeslip/_latestVersion
+[maven]: https://mvnrepository.com/artifact/com.hypercubetools/timeslip
+[maven_latest]: https://mvnrepository.com/artifact/com.hypercubetools/timeslip/latest
 [usage_guide]: usage-guide.md

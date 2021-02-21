@@ -7,7 +7,6 @@ plugins {
     kotlin("jvm") version "1.3.31"
     jacoco
     `maven-publish`
-    id("com.jfrog.bintray") version "1.8.4"
     id("org.jlleitschuh.gradle.ktlint") version "8.1.0"
     id("org.jlleitschuh.gradle.ktlint-idea") version "8.1.0"
     id("ru.vyarus.mkdocs") version "1.1.0"
@@ -55,23 +54,6 @@ val packageJavadoc by tasks.registering(Jar::class) {
     dependsOn("dokka")
     archiveClassifier.set("javadoc")
     from(sourceSets.main.get().allSource)
-}
-
-bintray {
-    user = System.getenv("BINTRAY_USER") ?: project.properties["bintray.user"]?.toString()
-    key = System.getenv("BINTRAY_KEY")
-    publish = true
-
-    setPublications("lib")
-
-    with(pkg) {
-        repo = project.group.toString()
-        name = project.name
-        setLicenses("MIT")
-        with(version) {
-            name = project.version.toString()
-        }
-    }
 }
 
 publishing {

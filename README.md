@@ -12,7 +12,7 @@ The TimeSlip API is specifically designed to be easy to use from Kotlin and Java
 
 ## Installation
 
-Releases are published to bintray [jcenter][jcenter].
+Releases are published to [maven central][maven].
  
 It can be included in your project by including the following in your project's build configuration.
 
@@ -84,5 +84,5 @@ println(formatTime(sequenceClock))
 // 10:17:00Z
 ```
 
-[jcenter]: https://bintray.com/plannigan/com.hypercubetools/timeslip
+[maven]: https://mvnrepository.com/artifact/com.hypercubetools/timeslip
 [project_website]: https://timeslip.hypercubetools.com/
