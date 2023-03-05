@@ -70,13 +70,6 @@ private fun JacocoViolationRule.limit(type: String, minValue: Double) {
     }
 }
 
-/**
- * Retrieves the [java][org.gradle.api.plugins.JavaPluginConvention] project convention.
- */
-private val Project.java: org.gradle.api.plugins.JavaPluginConvention
-    get() = convention.getPluginByName("java")
-
-
 private fun loadXml(file: String): Document {
     val doc = documentBuilder().parse(File(file))
     doc.normalizeDocument()
