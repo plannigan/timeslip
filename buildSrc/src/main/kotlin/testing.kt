@@ -24,7 +24,7 @@ fun Project.testWithJunit() {
             exceptionFormat = TestExceptionFormat.FULL
         }
 
-        reports.html.isEnabled = false
-        reports.junitXml.isEnabled = true
+        reports.html.required.set(false)
+        reports.junitXml.required.set(true)
     }
 }

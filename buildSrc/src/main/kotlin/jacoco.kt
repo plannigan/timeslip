@@ -37,9 +37,9 @@ fun Project.coverageWithJacoco() {
 
     tasks.withType<JacocoReport> {
         reports {
-            html.isEnabled = true
-            xml.isEnabled = true
-            csv.isEnabled = false
+            html.required.set(true)
+            xml.required.set(true)
+            csv.required.set(false)
         }
 
         // Jacoco doesn't provide an easy way to display the total coverage,
