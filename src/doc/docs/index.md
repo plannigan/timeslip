@@ -5,7 +5,7 @@ in a deterministic way, independent of the actual passage of time.
 
 The TimeSlip API is specifically designed to be easy to use from Kotlin and Java code.
 
-[![Kotlin](https://img.shields.io/badge/kotlin-1.4.31-blue.svg)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.5.32-blue.svg)](http://kotlinlang.org)
 [![MavenCentral](https://img.shields.io/maven-central/v/com.hypercubetools/timeslip)](https://mvnrepository.com/artifact/com.hypercubetools/timeslip)
 [![CircleCI](https://circleci.com/gh/plannigan/timeslip.svg?style=svg)](https://circleci.com/gh/plannigan/timeslip)
 [![codecov](https://codecov.io/gh/plannigan/timeslip/branch/master/graph/badge.svg)](https://codecov.io/gh/plannigan/timeslip)

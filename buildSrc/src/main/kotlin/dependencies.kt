@@ -1,7 +1,7 @@
 // Version information for dependencies
 
 object Versions {
-    val kotlin = "1.4.31"
+    val kotlin = "1.5.32"
     val hamkrest = "1.7.0.0"
     val hamcrest = "2.1"
     val junit = "5.4.2"
