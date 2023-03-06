@@ -4,7 +4,7 @@ import ru.vyarus.gradle.plugin.mkdocs.task.MkdocsTask
 import java.net.URL
 
 plugins {
-    kotlin("jvm") version "1.5.32"
+    kotlin("jvm") version "1.7.22"
     jacoco
     `maven-publish`
     id("org.jlleitschuh.gradle.ktlint") version "8.1.0"
