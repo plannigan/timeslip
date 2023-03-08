@@ -4,13 +4,14 @@ import ru.vyarus.gradle.plugin.mkdocs.task.MkdocsTask
 import java.net.URL
 
 plugins {
-    kotlin("jvm") version "1.7.22"
+    alias(libs.plugins.kotlin.jvm)
     jacoco
     `maven-publish`
-    id("org.jlleitschuh.gradle.ktlint") version "8.1.0"
-    id("org.jlleitschuh.gradle.ktlint-idea") version "8.1.0"
-    id("ru.vyarus.mkdocs") version "1.1.0"
-    id("org.jetbrains.dokka") version "0.9.18"
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.ktlint.idea)
+    alias(libs.plugins.mkdocs)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.jacocolog)
 }
 
 group = "com.hypercubetools"
@@ -22,14 +23,63 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation(libs.bundles.junit)
+    testImplementation(libs.hamkrest)
+    testImplementation(libs.hamcrest)
+    testRuntimeOnly(libs.junit.engine)
+    testRuntimeOnly(libs.kotlin.refelction)
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = Versions.targetJvm
+    kotlinOptions.jvmTarget = libs.versions.targetJvm.get()
 }
 
-testWithJunit()
-coverageWithJacoco()
+tasks.test {
+    useJUnitPlatform()
+
+    testLogging {
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+
+    reports.html.required.set(false)
+    reports.junitXml.required.set(true)
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.jacocoTestReport)
+
+    violationRules {
+        rule {
+            element = "BUNDLE"
+            excludes = listOf("com.jacoco.dto.*")
+            limit {
+                counter = "BRANCH"
+                minimum = BigDecimal(".75")
+            }
+            limit {
+                counter = "INSTRUCTION"
+                minimum = BigDecimal(".8")
+            }
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestCoverageVerification)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        html.required.set(true)
+        xml.required.set(false)
+        csv.required.set(false)
+    }
+}
 
 fun DokkaTask.dokkaConfig(format: String, outputDir: String) {
     outputFormat = format
