@@ -1,0 +1,44 @@
+name: CI
+
+# Workflow does NOT trigger on a feature branch until a pull request is created.
+# Workflow will always run when a pull request is merged to the default branch.
+on:
+  pull_request: {}
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: "read"
+
+jobs:
+  gradle:
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        java-version: ["8", "11"]
+    steps:
+    - name: Check out code
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+    - uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3.10.0
+      with:
+        distribution: "temurin"
+        java-version: ${{ matrix.java-version }}
+        cache: "gradle"
+
+    - name: Gradle check
+      uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2.4.0
+      with:
+        arguments: check
+
+    - name: Upload build reports
+      uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+      with:
+        name: build-reports
+        path: build/reports/
+
+    - name: Publish coverage results to Codecov
+      uses: codecov/codecov-action@d9f34f8cd5cb3b3eb79b3e4b5dae3a16df499a70 # tag=v3.1.1
+      with:
+        file: build/reports/jacoco/test/jacocoTestReport.xml
+        fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}
