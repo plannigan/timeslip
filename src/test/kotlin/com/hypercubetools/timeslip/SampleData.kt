@@ -9,12 +9,16 @@ import java.time.ZoneOffset
 
 @JvmField
 val SOME_INSTANT: Instant = Instant.ofEpochSecond(1548723723)
+
 @JvmField
 val SOME_OTHER_INSTANT: Instant = Instant.ofEpochSecond(1549166706)
+
 @JvmField
 val SOME_DURATION: Duration = Duration.ofSeconds(5)
+
 @JvmField
 val SOME_INSTANT_SOME_DURATION_LATER: Instant = SOME_INSTANT.plus(SOME_DURATION)
+
 @JvmField
 val SOME_INSTANT_TWO_SOME_DURATION_LATER: Instant = SOME_INSTANT.plus(SOME_DURATION).plus(
     SOME_DURATION
@@ -22,6 +26,7 @@ val SOME_INSTANT_TWO_SOME_DURATION_LATER: Instant = SOME_INSTANT.plus(SOME_DURAT
 
 @JvmField
 val SOME_ZONE_ID: ZoneId = ZoneOffset.ofHours(1)
+
 @JvmField
 val SOME_OTHER_ZONE_ID: ZoneId = ZoneOffset.ofHours(4)
 

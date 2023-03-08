@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import ru.vyarus.gradle.plugin.mkdocs.task.MkdocsTask
 import java.net.URL
 
@@ -8,7 +8,6 @@ plugins {
     jacoco
     `maven-publish`
     alias(libs.plugins.ktlint)
-    alias(libs.plugins.ktlint.idea)
     alias(libs.plugins.mkdocs)
     alias(libs.plugins.dokka)
     alias(libs.plugins.jacocolog)
