@@ -5,10 +5,10 @@ in a deterministic way, independent of the actual passage of time.
 
 The TimeSlip API is specifically designed to be easy to use from Kotlin and Java code.
 
+[![CI pipeline status](https://github.com/plannigan/timeslip/actions/workflows/main.yaml/badge.svg?branch=main)][ci]
 [![Kotlin](https://img.shields.io/badge/kotlin-1.7.22-blue.svg)](http://kotlinlang.org)
 [![MavenCentral](https://img.shields.io/maven-central/v/com.hypercubetools/timeslip)](https://mvnrepository.com/artifact/com.hypercubetools/timeslip)
-[![CircleCI](https://circleci.com/gh/plannigan/timeslip.svg?style=svg)](https://circleci.com/gh/plannigan/timeslip)
-[![codecov](https://codecov.io/gh/plannigan/timeslip/branch/master/graph/badge.svg)](https://codecov.io/gh/plannigan/timeslip)
+[![codecov](https://codecov.io/gh/plannigan/timeslip/branch/main/graph/badge.svg?token=XrvidOv0fG)](https://codecov.io/gh/plannigan/timeslip)
 
 ## Installation
 
@@ -84,5 +84,6 @@ println(formatTime(sequenceClock))
 // 10:17:00Z
 ```
 
+[ci]: https://github.com/plannigan/timeslip/actions
 [maven]: https://mvnrepository.com/artifact/com.hypercubetools/timeslip
 [project_website]: https://timeslip.hypercubetools.com/
