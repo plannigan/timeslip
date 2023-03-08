@@ -1,0 +1,28 @@
+[versions]
+kotlin = "1.7.22"
+hamkrest = "1.7.0.0"
+hamcrest = "2.2"
+junit = "5.9.2"
+targetJvm = "1.8"
+ktlint = "11.3.1"
+mkdocs = "1.1.0"
+dokka = "0.9.18"
+jacocolog = "3.1.0"
+
+[libraries]
+junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+hamkrest = { group = "com.natpryce", name = "hamkrest", version.ref = "hamkrest" }
+hamcrest = { group = "org.hamcrest", name = "hamcrest", version.ref = "hamcrest" }
+kotlin-refelction = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin"}
+
+[bundles]
+junit = ["junit-api", "junit-params"]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+mkdocs = { id = "ru.vyarus.mkdocs", version.ref = "mkdocs" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+jacocolog = { id = "org.barfuin.gradle.jacocolog", version.ref = "jacocolog" }

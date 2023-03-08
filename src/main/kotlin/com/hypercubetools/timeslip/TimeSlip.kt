@@ -1,6 +1,10 @@
 package com.hypercubetools.timeslip
 
-import java.time.*
+import java.time.Clock
+import java.time.Duration
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 /**
  *  Produce a value based on the previous value.
@@ -46,7 +50,9 @@ class TimeSlip private constructor(
      */
     override fun withZone(newZone: ZoneId): Clock = TimeSlip(
         nextInstant ?: throw IllegalStateException("No more times to provide."),
-        newZone, isSequence, tickForward
+        newZone,
+        isSequence,
+        tickForward
     )
 
     /**
@@ -272,6 +278,7 @@ class TimeSlip private constructor(
                 return TimeSlip(null, zone, isSequence = true)
             }
             var nextIndex = 1
+
             @Suppress("UNUSED_PARAMETER")
             fun tickForward(current: Instant): Instant? {
                 if (!cycle && nextIndex >= values.size) {
