@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.7.22"
 hamkrest = "1.7.0.0"
-hamcrest = "2.1"
+hamcrest = "2.2"
 junit = "5.4.2"
 targetJvm = "1.8"
 ktlint = "8.1.0"
