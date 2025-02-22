@@ -37,7 +37,7 @@ class TimeSlip private constructor(
     initialInstant: Instant?,
     private val zone: ZoneId,
     private val isSequence: Boolean = false,
-    private val tickForward: OptionallyTickForward = noopTick
+    private val tickForward: OptionallyTickForward = noopTick,
 ) : Clock() {
     private var nextInstant: Instant? = initialInstant
 
@@ -48,12 +48,13 @@ class TimeSlip private constructor(
      * @return a clock based on this clock with the specified time-zone
      * @throws IllegalStateException This clock doesn't have any more times to provide.
      */
-    override fun withZone(newZone: ZoneId): Clock = TimeSlip(
-        nextInstant ?: throw IllegalStateException("No more times to provide."),
-        newZone,
-        isSequence,
-        tickForward
-    )
+    override fun withZone(newZone: ZoneId): Clock =
+        TimeSlip(
+            nextInstant ?: throw IllegalStateException("No more times to provide."),
+            newZone,
+            isSequence,
+            tickForward,
+        )
 
     /**
      * Gets the time-zone being used to create dates and times.
@@ -87,13 +88,14 @@ class TimeSlip private constructor(
         if (isSequence) {
             throw notSupported("sequences")
         }
-        nextInstant = nextInstant.let {
-            if (it == null) {
-                throw notSupported("TimeSlip.noCall() or after done() was called")
-            } else {
-                it.plus(delta)
+        nextInstant =
+            nextInstant.let {
+                if (it == null) {
+                    throw notSupported("TimeSlip.noCall() or after done() was called")
+                } else {
+                    it.plus(delta)
+                }
             }
-        }
     }
 
     /**
@@ -121,8 +123,7 @@ class TimeSlip private constructor(
         nextInstant = null
     }
 
-    private fun notSupported(condition: String) =
-        IllegalStateException("Calling tick() is not supported with $condition.")
+    private fun notSupported(condition: String) = IllegalStateException("Calling tick() is not supported with $condition.")
 
     companion object {
         /**
@@ -144,7 +145,10 @@ class TimeSlip private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun at(initialInstant: Instant, zone: ZoneId = DEFAULT_ZONE) = TimeSlip(initialInstant, zone)
+        fun at(
+            initialInstant: Instant,
+            zone: ZoneId = DEFAULT_ZONE,
+        ) = TimeSlip(initialInstant, zone)
 
         /**
          * Create an instance that starts at a given time, but moves forward by a constant amount each time the current
@@ -158,7 +162,11 @@ class TimeSlip private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun startAt(initialInstant: Instant, zone: ZoneId = DEFAULT_ZONE, tickAmount: Duration = ONE_SECOND): TimeSlip {
+        fun startAt(
+            initialInstant: Instant,
+            zone: ZoneId = DEFAULT_ZONE,
+            tickAmount: Duration = ONE_SECOND,
+        ): TimeSlip {
             return TimeSlip(initialInstant, zone, tickForward = { instant -> instant.plus(tickAmount) })
         }
 
@@ -176,7 +184,11 @@ class TimeSlip private constructor(
          */
         @JvmStatic
         @JvmOverloads
-        fun startAt(initialInstant: Instant, zone: ZoneId = DEFAULT_ZONE, tickForward: TickForward): TimeSlip {
+        fun startAt(
+            initialInstant: Instant,
+            zone: ZoneId = DEFAULT_ZONE,
+            tickForward: TickForward,
+        ): TimeSlip {
             return TimeSlip(initialInstant, zone, isSequence = false, tickForward = tickForward)
         }
 
@@ -231,7 +243,7 @@ class TimeSlip private constructor(
          */
         fun cycle(shouldCycle: Boolean) = apply { cycle = shouldCycle }
 
-        private val _instants = arrayListOf<Instant>()
+        private val instants = arrayListOf<Instant>()
 
         /**
          * Prepend a number of instants to the start of the sequence of instants.
@@ -247,7 +259,7 @@ class TimeSlip private constructor(
          * @param instants Instants to add to the sequence.
          * @return This builder.
          */
-        fun first(instants: Collection<Instant>) = apply { _instants.addAll(0, instants) }
+        fun first(instants: Collection<Instant>) = apply { this.instants.addAll(0, instants) }
 
         /**
          * Apend a number of instants to the end of the sequence of instants.
@@ -263,7 +275,7 @@ class TimeSlip private constructor(
          * @param instants Instants to add to the sequence.
          * @return This builder.
          */
-        fun then(instants: Collection<Instant>) = apply { _instants.addAll(instants) }
+        fun then(instants: Collection<Instant>) = apply { this.instants.addAll(instants) }
 
         /**
          * Construct a [TimeSlip] instance that will provide [Instant]s based on the configured sequence.
@@ -273,7 +285,7 @@ class TimeSlip private constructor(
          * that does not produce any times.
          */
         fun build(): TimeSlip {
-            val values = _instants.toList()
+            val values = instants.toList()
             if (values.isEmpty()) {
                 return TimeSlip(null, zone, isSequence = true)
             }
