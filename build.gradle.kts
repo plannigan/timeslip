@@ -80,7 +80,10 @@ tasks.jacocoTestReport {
     }
 }
 
-fun DokkaTask.dokkaConfig(format: String, outputDir: String) {
+fun DokkaTask.dokkaConfig(
+    format: String,
+    outputDir: String,
+) {
     outputFormat = format
     outputDirectory = outputDir
     externalDocumentationLink {

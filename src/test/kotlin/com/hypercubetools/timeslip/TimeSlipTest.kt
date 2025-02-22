@@ -30,20 +30,22 @@ class TimeSlipTest {
 
     @Test
     fun `at() sets instant and zone`() {
-        val clock = TimeSlip.at(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.at(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
 
         clock.assertHas(SOME_INSTANT, SOME_ZONE_ID)
     }
 
     @Test
     fun `withZone() changes zone for same instant`() {
-        val clock = TimeSlip.at(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.at(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
 
         val zonedClock = clock.withZone(SOME_OTHER_ZONE_ID)
 
@@ -53,10 +55,11 @@ class TimeSlipTest {
     @ParameterizedTest
     @MethodSource("com.hypercubetools.timeslip.SampleData#zoneProducer")
     fun `withZone() matches implementation of Clock-fixed()-withZone()`(zoneId: ZoneId) {
-        val clock = TimeSlip.at(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.at(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
         val fixedClock = Clock.fixed(SOME_INSTANT, SOME_ZONE_ID)
 
         val newZoneClock = clock.withZone(zoneId)
@@ -67,10 +70,11 @@ class TimeSlipTest {
     @ParameterizedTest
     @MethodSource("com.hypercubetools.timeslip.SampleData#zoneProducer")
     fun `withZone() changes zone for same instant`(zoneId: ZoneId) {
-        val clock = TimeSlip.at(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.at(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
 
         val zonedClock = clock.withZone(zoneId)
 
@@ -79,42 +83,45 @@ class TimeSlipTest {
 
     @Test
     fun `tick() no args moves instant forward one second`() {
-        val clock = TimeSlip.at(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.at(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
 
         clock.tick()
 
         clock.assertHas(
             SOME_INSTANT.plus(Duration.ofSeconds(1)),
-            SOME_ZONE_ID
+            SOME_ZONE_ID,
         )
     }
 
     @ParameterizedTest
     @MethodSource("com.hypercubetools.timeslip.SampleData#durationProducer")
     fun `tick() moves instant forward duration amount`(duration: Duration) {
-        val clock = TimeSlip.at(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.at(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
 
         clock.tick(duration)
 
         clock.assertHas(
             SOME_INSTANT.plus(duration),
-            SOME_ZONE_ID
+            SOME_ZONE_ID,
         )
     }
 
     @ParameterizedTest
     @MethodSource("com.hypercubetools.timeslip.SampleData#instantProducer")
     fun `moveTo() moves instant to given instant`(instant: Instant) {
-        val clock = TimeSlip.at(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.at(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
 
         clock.moveTo(instant)
 
@@ -173,36 +180,38 @@ class TimeSlipTest {
         assertAll(
             { assertThat(clock.zone, equalTo(ZoneOffset.UTC as ZoneId)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT.plus(Duration.ofSeconds(1)))) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT.plus(Duration.ofSeconds(1)))) },
         )
     }
 
     @Test
     fun `startAt(default tickAmount) increases instant each call`() {
-        val clock = TimeSlip.startAt(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        )
+        val clock =
+            TimeSlip.startAt(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            )
 
         assertAll(
             { assertThat(clock.zone, equalTo(SOME_ZONE_ID)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT.plus(Duration.ofSeconds(1)))) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT.plus(Duration.ofSeconds(1)))) },
         )
     }
 
     @Test
     fun `startAt(tickAmount) increases instant each call`() {
-        val clock = TimeSlip.startAt(
-            SOME_INSTANT,
-            SOME_ZONE_ID,
-            tickAmount = SOME_DURATION
-        )
+        val clock =
+            TimeSlip.startAt(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+                tickAmount = SOME_DURATION,
+            )
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) },
         )
     }
 
@@ -216,34 +225,36 @@ class TimeSlipTest {
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) },
         )
     }
 
     @Test
     fun `startAt(zoneId, tickForward) apply change each call`() {
-        val clock = TimeSlip.startAt(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        ) { initial -> initial.plus(SOME_DURATION) }
+        val clock =
+            TimeSlip.startAt(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            ) { initial -> initial.plus(SOME_DURATION) }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) },
         )
     }
 
     @Test
     fun `startAt(tickForward) - tick() causes tickForward to get initial value increased by duration`() {
         var tickForwardArg: Instant? = null
-        val clock = TimeSlip.startAt(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        ) { instant ->
-            tickForwardArg = instant
-            SOME_OTHER_INSTANT
-        }
+        val clock =
+            TimeSlip.startAt(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            ) { instant ->
+                tickForwardArg = instant
+                SOME_OTHER_INSTANT
+            }
 
         clock.tick(SOME_DURATION)
         clock.instant() // trigger call to tickForward
@@ -254,13 +265,14 @@ class TimeSlipTest {
     @Test
     fun `startAt(tickForward) - moveTo() causes tickForward to get moveTo() arg`() {
         var tickForwardArg: Instant? = null
-        val clock = TimeSlip.startAt(
-            SOME_INSTANT,
-            SOME_ZONE_ID
-        ) { instant ->
-            tickForwardArg = instant
-            SOME_OTHER_INSTANT
-        }
+        val clock =
+            TimeSlip.startAt(
+                SOME_INSTANT,
+                SOME_ZONE_ID,
+            ) { instant ->
+                tickForwardArg = instant
+                SOME_OTHER_INSTANT
+            }
 
         clock.moveTo(SOME_OTHER_INSTANT)
         clock.instant() // trigger call to tickForward
@@ -298,91 +310,96 @@ class TimeSlipTest {
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
-            { clock.assertInstantThrowsIllegalStateException() }
+            { clock.assertInstantThrowsIllegalStateException() },
         )
     }
 
     @Test
     fun `sequence() two instants - returns twice, then throws exception`() {
-        val clock = TimeSlip.sequence {
-            first(SOME_INSTANT)
-            then(SOME_OTHER_INSTANT)
-        }
+        val clock =
+            TimeSlip.sequence {
+                first(SOME_INSTANT)
+                then(SOME_OTHER_INSTANT)
+            }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) },
-            { clock.assertInstantThrowsIllegalStateException() }
+            { clock.assertInstantThrowsIllegalStateException() },
         )
     }
 
     @Test
     fun `sequence() varargs - expected order`() {
-        val clock = TimeSlip.sequence {
-            first(
-                SOME_INSTANT,
-                SOME_INSTANT_TWO_SOME_DURATION_LATER
-            )
-            then(
-                SOME_OTHER_INSTANT,
-                SOME_INSTANT_SOME_DURATION_LATER
-            )
-        }
+        val clock =
+            TimeSlip.sequence {
+                first(
+                    SOME_INSTANT,
+                    SOME_INSTANT_TWO_SOME_DURATION_LATER,
+                )
+                then(
+                    SOME_OTHER_INSTANT,
+                    SOME_INSTANT_SOME_DURATION_LATER,
+                )
+            }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) },
             { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) },
         )
     }
 
     @Test
     fun `sequence() lists - expected order`() {
-        val clock = TimeSlip.sequence {
-            first(
-                listOf(
-                    SOME_INSTANT,
-                    SOME_INSTANT_TWO_SOME_DURATION_LATER
+        val clock =
+            TimeSlip.sequence {
+                first(
+                    listOf(
+                        SOME_INSTANT,
+                        SOME_INSTANT_TWO_SOME_DURATION_LATER,
+                    ),
                 )
-            )
-            then(
-                listOf(
-                    SOME_OTHER_INSTANT,
-                    SOME_INSTANT_SOME_DURATION_LATER
+                then(
+                    listOf(
+                        SOME_OTHER_INSTANT,
+                        SOME_INSTANT_SOME_DURATION_LATER,
+                    ),
                 )
-            )
-        }
+            }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) },
             { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) },
         )
     }
 
     @Test
     fun `sequence() one instant cycle - constantly returns instance`() {
-        val clock = TimeSlip.sequence {
-            first(SOME_INSTANT)
-            cycle = true
-        }
+        val clock =
+            TimeSlip.sequence {
+                first(SOME_INSTANT)
+                cycle = true
+            }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT)) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
         )
     }
 
     @Test
     fun `sequence() two instants cycle - alternates instances`() {
-        val clock = TimeSlip.sequence {
-            first(SOME_INSTANT)
-            then(SOME_OTHER_INSTANT)
-            cycle = true
-        }
+        val clock =
+            TimeSlip.sequence {
+                first(SOME_INSTANT)
+                then(SOME_OTHER_INSTANT)
+                cycle = true
+            }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
@@ -390,41 +407,43 @@ class TimeSlipTest {
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) }
+            { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) },
         )
     }
 
     @Test
     fun `sequence() then before first - first returned first`() {
-        val clock = TimeSlip.sequence {
-            then(SOME_OTHER_INSTANT)
-            first(SOME_INSTANT)
-        }
+        val clock =
+            TimeSlip.sequence {
+                then(SOME_OTHER_INSTANT)
+                first(SOME_INSTANT)
+            }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) }
+            { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) },
         )
     }
 
     @Test
     fun `sequence() then before first varargs - first returned first`() {
-        val clock = TimeSlip.sequence {
-            then(
-                SOME_OTHER_INSTANT,
-                SOME_INSTANT_SOME_DURATION_LATER
-            )
-            first(
-                SOME_INSTANT,
-                SOME_INSTANT_TWO_SOME_DURATION_LATER
-            )
-        }
+        val clock =
+            TimeSlip.sequence {
+                then(
+                    SOME_OTHER_INSTANT,
+                    SOME_INSTANT_SOME_DURATION_LATER,
+                )
+                first(
+                    SOME_INSTANT,
+                    SOME_INSTANT_TWO_SOME_DURATION_LATER,
+                )
+            }
 
         assertAll(
             { assertThat(clock.instant(), equalTo(SOME_INSTANT)) },
             { assertThat(clock.instant(), equalTo(SOME_INSTANT_TWO_SOME_DURATION_LATER)) },
             { assertThat(clock.instant(), equalTo(SOME_OTHER_INSTANT)) },
-            { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) }
+            { assertThat(clock.instant(), equalTo(SOME_INSTANT_SOME_DURATION_LATER)) },
         )
     }
 
@@ -437,10 +456,11 @@ class TimeSlipTest {
 
     @Test
     fun `sequence() zone set - clock has given zone`() {
-        val clock = TimeSlip.sequence {
-            zone = SOME_ZONE_ID
-            first(SOME_INSTANT)
-        }
+        val clock =
+            TimeSlip.sequence {
+                zone = SOME_ZONE_ID
+                first(SOME_INSTANT)
+            }
 
         assertThat(clock.zone, equalTo(SOME_ZONE_ID))
     }
@@ -452,15 +472,17 @@ class TimeSlipTest {
     }
 
     companion object {
-
         @JvmStatic
         fun Clock.assertEqualTo(expectedClock: Clock) = this.assertHas(expectedClock.instant(), expectedClock.zone)
 
         @JvmStatic
-        fun Clock.assertHas(expectedInstant: Instant, expectedZoneId: ZoneId) {
+        fun Clock.assertHas(
+            expectedInstant: Instant,
+            expectedZoneId: ZoneId,
+        ) {
             assertAll(
                 { assertThat(this.instant(), equalTo(expectedInstant)) },
-                { assertThat(this.zone, equalTo(expectedZoneId)) }
+                { assertThat(this.zone, equalTo(expectedZoneId)) },
             )
         }
     }

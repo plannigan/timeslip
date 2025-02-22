@@ -20,9 +20,10 @@ val SOME_DURATION: Duration = Duration.ofSeconds(5)
 val SOME_INSTANT_SOME_DURATION_LATER: Instant = SOME_INSTANT.plus(SOME_DURATION)
 
 @JvmField
-val SOME_INSTANT_TWO_SOME_DURATION_LATER: Instant = SOME_INSTANT.plus(SOME_DURATION).plus(
-    SOME_DURATION
-)
+val SOME_INSTANT_TWO_SOME_DURATION_LATER: Instant =
+    SOME_INSTANT.plus(SOME_DURATION).plus(
+        SOME_DURATION,
+    )
 
 @JvmField
 val SOME_ZONE_ID: ZoneId = ZoneOffset.ofHours(1)
@@ -30,23 +31,24 @@ val SOME_ZONE_ID: ZoneId = ZoneOffset.ofHours(1)
 @JvmField
 val SOME_OTHER_ZONE_ID: ZoneId = ZoneOffset.ofHours(4)
 
-fun zoneProducer() =
-    arrayOf(SOME_OTHER_ZONE_ID, ZoneOffset.ofHours(1), ZoneOffset.ofHours(3), ZoneOffset.ofHours(-4))
+fun zoneProducer() = arrayOf(SOME_OTHER_ZONE_ID, ZoneOffset.ofHours(1), ZoneOffset.ofHours(3), ZoneOffset.ofHours(-4))
 
-fun durationProducer() = arrayOf(
-    SOME_DURATION,
-    Duration.ofSeconds(15),
-    Duration.ofHours(5),
-    Duration.ofSeconds(-5),
-    Duration.ofHours(-25)
-)
+fun durationProducer() =
+    arrayOf(
+        SOME_DURATION,
+        Duration.ofSeconds(15),
+        Duration.ofHours(5),
+        Duration.ofSeconds(-5),
+        Duration.ofHours(-25),
+    )
 
-fun instantProducer() = arrayOf(
-    SOME_INSTANT,
-    SOME_INSTANT_SOME_DURATION_LATER,
-    SOME_OTHER_INSTANT,
-    Instant.EPOCH,
-    Instant.EPOCH,
-    Instant.MIN,
-    Instant.MAX
-)
+fun instantProducer() =
+    arrayOf(
+        SOME_INSTANT,
+        SOME_INSTANT_SOME_DURATION_LATER,
+        SOME_OTHER_INSTANT,
+        Instant.EPOCH,
+        Instant.EPOCH,
+        Instant.MIN,
+        Instant.MAX,
+    )
