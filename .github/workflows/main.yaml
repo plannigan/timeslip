@@ -11,7 +11,7 @@ permissions:
   contents: "read"
 
 jobs:
-  gradle:
+  check:
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
@@ -25,10 +25,11 @@ jobs:
         java-version: ${{ matrix.java-version }}
         cache: "gradle"
 
-    - name: Gradle check
-      uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2.4.0
-      with:
-        arguments: check
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4.3.0
+
+    - name: Check
+      run: "gradle check"
 
     - name: Upload build reports
       uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
