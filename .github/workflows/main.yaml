@@ -37,8 +37,8 @@ jobs:
         path: build/reports/
 
     - name: Publish coverage results to Codecov
-      uses: codecov/codecov-action@d9f34f8cd5cb3b3eb79b3e4b5dae3a16df499a70 # tag=v3.1.1
+      uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3 # v5.3.1
       with:
-        file: build/reports/jacoco/test/jacocoTestReport.xml
+        files: build/reports/jacoco/test/jacocoTestReport.xml
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
