@@ -6,7 +6,7 @@ junit = "5.9.2"
 targetJvm = "1.8"
 ktlint = "12.1.2"
 mkdocs = "1.1.0"
-dokka = "0.9.18"
+dokka = "0.10.1"
 jacocolog = "3.1.0"
 
 [libraries]
