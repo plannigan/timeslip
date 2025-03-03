@@ -1,7 +1,8 @@
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import ru.vyarus.gradle.plugin.mkdocs.task.MkdocsTask
 import java.net.URL
+
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -29,8 +30,11 @@ dependencies {
     testRuntimeOnly(libs.kotlin.refelction)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = libs.versions.targetJvm.get()
+kotlin {
+    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
 }
 
 tasks.test {

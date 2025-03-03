@@ -1,9 +1,8 @@
 [versions]
-kotlin = "1.7.22"
+kotlin = "1.9.25"
 hamkrest = "1.8.0.1"
 hamcrest = "3.0"
 junit = "5.9.2"
-targetJvm = "1.8"
 ktlint = "12.1.2"
 mkdocs = "1.1.0"
 dokka = "0.9.18"
