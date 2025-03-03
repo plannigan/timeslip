@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update Kotlin to 1.7
+
+* Update project dependencies:
+    * Kotlin to `1.9.25`
+    * JDK to `17`
 
 ### Internal
 
