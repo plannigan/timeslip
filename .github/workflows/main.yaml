@@ -36,6 +36,7 @@ jobs:
       with:
         name: build-reports-${{ matrix.java-version }}
         path: build/reports/
+      if: ${{ always() }}
 
     - name: Publish coverage results to Codecov
       uses: codecov/codecov-action@0565863a31f2c772f9f0395002a31e3f06189574 # v5.4.0
@@ -43,3 +44,4 @@ jobs:
         files: build/reports/jacoco/test/jacocoTestReport.xml
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
+      if: ${{ always() }}
