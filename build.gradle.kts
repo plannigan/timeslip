@@ -22,10 +22,13 @@ repositories {
 }
 
 dependencies {
-    testImplementation(libs.bundles.junit)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation(libs.hamkrest)
     testImplementation(libs.hamcrest)
-    testRuntimeOnly(libs.junit.engine)
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly(libs.kotlin.refelction)
 }
 
@@ -46,7 +49,7 @@ tasks.test {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 
-    reports.html.required.set(false)
+    reports.html.required.set(true)
     reports.junitXml.required.set(true)
     finalizedBy(tasks.jacocoTestReport)
 }
