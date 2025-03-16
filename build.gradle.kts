@@ -22,7 +22,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     testImplementation(libs.bundles.junit)
     testImplementation(libs.hamkrest)
     testImplementation(libs.hamcrest)
