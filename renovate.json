@@ -1,7 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-
-  "baseBranches": ["main", "renovate-testing"],
+  "baseBranches": [
+    "main",
+    "renovate-testing"
+  ],
   "useBaseBranchConfig": "merge",
 
   "extends": [
@@ -24,8 +26,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "README\\.md"
+      "managerFilePatterns": [
+        "/README\\.md/"
       ],
       "matchStringsStrategy": "any",
       "matchStrings": [
