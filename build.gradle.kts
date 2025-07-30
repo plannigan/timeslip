@@ -99,7 +99,7 @@ fun DokkaTask.dokkaConfig(
 
 // Generate the API documentation as html for javadoc distribution
 val dokka by tasks.getting(DokkaTask::class) {
-    dokkaConfig("html", "$buildDir/javadoc")
+    dokkaConfig("html", "${layout.buildDirectory}/javadoc")
 }
 
 // Generate the API documentation as markdown for docs site

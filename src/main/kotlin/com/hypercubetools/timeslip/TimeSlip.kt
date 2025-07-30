@@ -166,9 +166,7 @@ class TimeSlip private constructor(
             initialInstant: Instant,
             zone: ZoneId = DEFAULT_ZONE,
             tickAmount: Duration = ONE_SECOND,
-        ): TimeSlip {
-            return TimeSlip(initialInstant, zone, tickForward = { instant -> instant.plus(tickAmount) })
-        }
+        ): TimeSlip = TimeSlip(initialInstant, zone, tickForward = { instant -> instant.plus(tickAmount) })
 
         /**
          * Create an instance that starts at a given time, but changes based on a given function each time the current
@@ -188,9 +186,7 @@ class TimeSlip private constructor(
             initialInstant: Instant,
             zone: ZoneId = DEFAULT_ZONE,
             tickForward: TickForward,
-        ): TimeSlip {
-            return TimeSlip(initialInstant, zone, isSequence = false, tickForward = tickForward)
-        }
+        ): TimeSlip = TimeSlip(initialInstant, zone, isSequence = false, tickForward = tickForward)
 
         /**
          * Create a [TimeSlip] instance backed by a sequence of [Instant]s.
