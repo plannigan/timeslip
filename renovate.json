@@ -1,18 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "baseBranches": [
+  "baseBranchPatterns": [
     "main",
     "renovate-testing"
   ],
   "useBaseBranchConfig": "merge",
-
   "extends": [
     "config:recommended",
     "helpers:pinGitHubActionDigests",
     "docker:pinDigests",
     "schedule:earlyMondays"
   ],
-
   "enabledManagers": [
     "dockerfile",
     "docker-compose",
@@ -22,7 +20,6 @@
     "gradle-wrapper",
     "custom.regex"
   ],
-
   "customManagers": [
     {
       "customType": "regex",
@@ -31,7 +28,7 @@
       ],
       "matchStringsStrategy": "any",
       "matchStrings": [
-        "badge\/kotlin-(?<currentValue>.+?)-blue"
+        "badge/kotlin-(?<currentValue>.+?)-blue"
       ],
       "datasourceTemplate": "maven",
       "depTypeTemplate": "plugin",
@@ -39,7 +36,6 @@
       "packageNameTemplate": "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin"
     }
   ],
-
   "packageRules": [
     {
       "groupName": "GitHub Upload/Download Artifacts",
