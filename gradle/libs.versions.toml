@@ -2,7 +2,7 @@
 kotlin = "2.2.20"
 hamkrest = "1.8.0.1"
 hamcrest = "3.0"
-junit = "5.13.4"
+junit = "5.14.1"
 ktlint = "13.1.0"
 mkdocs = "1.1.0"
 dokka = "0.9.18"
