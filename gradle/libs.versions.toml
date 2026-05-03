@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.21"
+kotlin = "2.3.21"
 hamkrest = "1.8.0.1"
 hamcrest = "3.0"
 junit = "6.0.2"
