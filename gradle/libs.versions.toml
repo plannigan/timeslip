@@ -5,7 +5,7 @@ hamcrest = "3.0"
 junit = "6.0.2"
 ktlint = "14.0.1"
 mkdocs = "1.1.0"
-dokka = "0.9.18"
+dokka = "0.10.1"
 jacocolog = "4.0.2"
 
 [libraries]
